@@ -1,68 +1,40 @@
-public class No
-{
-    public static final int m = 2;
+public class No {
     private int vInfo[];
-    private int vPos[];
     private No vLig[];
+    private No ant;
+    private No prox;
     private int tl;
 
-    public No()
-    {
-        vInfo = new int[2*m+1];
-        vPos = new int[2*m+1];
-        vLig = new No[2*m+2];
-        tl = 0;
+    public static final int N = 4;
+
+    public No() {
+        this.vInfo = new int[N];
+        this.vLig = new No[N + 1];
+        this.tl = 0;
+        this.ant = null;
+        this.prox = null;
     }
 
-    public No(int info, int posArq)
-    {
+    public No(int info) {
         this();
-        vInfo[0] = info;
-        vPos[0] = posArq;
-        tl = 1;
+        this.vInfo[0] = info;
+        this.tl = 1;
     }
 
-    public int procurarPosicao(int info)
-    {
-        int pos = 0;
-        while(pos<tl && info>vInfo[pos])
-            pos++;
-        return pos;
+    public int getvInfo(int pos) {
+        return vInfo[pos];
     }
 
-    public void remanejar(int pos)
-    {
-        vLig[tl+1] = vLig[tl];
-        for(int j=tl; j>pos; j--)
-        {
-            vInfo[j] = vInfo[j-1];
-            vPos[j] = vPos[j-1];
-            vLig[j] = vLig[j-1];
-        }
+    public void setvInfo(int pos, int vInfo) {
+        this.vInfo[pos] = vInfo;
     }
 
-    public int getvInfo(int p) {
-        return vInfo[p];
+    public No getvLig(int pos) {
+        return this.vLig[pos];
     }
 
-    public void setvInfo(int p, int info) {
-        vInfo[p] = info;
-    }
-
-    public int getvPos(int p) {
-        return vPos[p];
-    }
-
-    public void setvPos(int p, int posArq) {
-        vPos[p] = posArq;
-    }
-
-    public No getvLig(int p) {
-        return vLig[p];
-    }
-
-    public void setvLig(int p, No lig) {
-        vLig[p] = lig;
+    public void setvLig(int pos, No vLig) {
+        this.vLig[pos] = vLig;
     }
 
     public int getTl() {
@@ -73,13 +45,39 @@ public class No
         this.tl = tl;
     }
 
-    public void remanejarInverso(int pos) {
-        int i;
-        for(i=pos;i<tl-1;i++){
-            vInfo[i] = vInfo[i+1];
-            vPos[i]= vPos[i+1];
-            vLig[i] = vLig[i+1];
+    public No getAnt() {
+        return this.ant;
+    }
+
+    public No getProx() {
+        return this.prox;
+    }
+
+    public void setAnt(No ant) {
+        this.ant = ant;
+    }
+
+    public void setProx(No prox) {
+        this.prox = prox;
+    }
+
+    public int procurarPosicao(int info) {
+        int i = 0;
+        while (i < tl && info > vInfo[i]) {
+            i++;
         }
-        vLig[i] = vLig[i+1];
+        return i;
+    }
+
+    public void remanejar(int pos) {
+        if (tl < vLig.length - 1) {
+            vLig[tl + 1] = vLig[tl];
+        }
+        for (int i = tl; i > pos; i--) {
+            vInfo[i] = vInfo[i - 1];
+            if (i < vLig.length) {
+                vLig[i] = vLig[i - 1];
+            }
+        }
     }
 }
