@@ -1,40 +1,39 @@
-public class No {
-    private int vInfo[];
-    private No vLig[];
-    private No ant;
-    private No prox;
+class No {
+    public static final int N = 5;
+    private int[] vInfo;
+    private No[] vLig;
     private int tl;
-
-    public static final int N = 4;
+    private No prox;
+    private No ant;
 
     public No() {
-        this.vInfo = new int[N];
-        this.vLig = new No[N + 1];
-        this.tl = 0;
-        this.ant = null;
-        this.prox = null;
+        vInfo = new int[N];
+        vLig = new No[N + 1];
+        tl = 0;
+        prox = null;
+        ant = null;
     }
 
     public No(int info) {
         this();
-        this.vInfo[0] = info;
-        this.tl = 1;
+        vInfo[0] = info;
+        tl = 1;
     }
 
     public int getvInfo(int pos) {
         return vInfo[pos];
     }
 
-    public void setvInfo(int pos, int vInfo) {
-        this.vInfo[pos] = vInfo;
+    public void setvInfo(int pos, int info) {
+        vInfo[pos] = info;
     }
 
     public No getvLig(int pos) {
-        return this.vLig[pos];
+        return vLig[pos];
     }
 
-    public void setvLig(int pos, No vLig) {
-        this.vLig[pos] = vLig;
+    public void setvLig(int pos, No no) {
+        vLig[pos] = no;
     }
 
     public int getTl() {
@@ -45,39 +44,42 @@ public class No {
         this.tl = tl;
     }
 
-    public No getAnt() {
-        return this.ant;
-    }
-
     public No getProx() {
-        return this.prox;
-    }
-
-    public void setAnt(No ant) {
-        this.ant = ant;
+        return prox;
     }
 
     public void setProx(No prox) {
         this.prox = prox;
     }
 
+    public No getAnt() {
+        return ant;
+    }
+
+    public void setAnt(No ant) {
+        this.ant = ant;
+    }
+
     public int procurarPosicao(int info) {
-        int i = 0;
-        while (i < tl && info > vInfo[i]) {
-            i++;
+        int pos = 0;
+        while (pos < tl && vInfo[pos] <= info) {
+            pos++;
         }
-        return i;
+        return pos;
     }
 
     public void remanejar(int pos) {
-        if (tl < vLig.length - 1) {
-            vLig[tl + 1] = vLig[tl];
-        }
         for (int i = tl; i > pos; i--) {
             vInfo[i] = vInfo[i - 1];
-            if (i < vLig.length) {
-                vLig[i] = vLig[i - 1];
-            }
+            vLig[i + 1] = vLig[i];
         }
+    }
+
+    public void remanejarExclusao(int pos) {
+        for (int i = pos; i < tl - 1; i++) {
+            vInfo[i] = vInfo[i + 1];
+            vLig[i] = vLig[i + 1];
+        }
+        vLig[tl - 1] = vLig[tl];
     }
 }

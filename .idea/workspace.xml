@@ -7,7 +7,7 @@
     <list default="true" id="e713bf66-8a71-4856-b5eb-2706a61cf152" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Aplicacao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Aplicacao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/BPlus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTree.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/No.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/No.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -37,22 +37,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Aplicacao.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/marcus/Documentos/PO/projBTree&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Aplicacao.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/marcus/Documentos/PO/projB+Tree",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Aplicacao" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Aplicacao" />
@@ -96,6 +96,10 @@
       <workItem from="1715049648489" duration="20000" />
       <workItem from="1715366304905" duration="554000" />
       <workItem from="1715552450832" duration="7147000" />
+      <workItem from="1715826405355" duration="2486000" />
+      <workItem from="1715971180282" duration="12000" />
+      <workItem from="1716062636168" duration="21000" />
+      <workItem from="1716150088107" duration="10222000" />
     </task>
     <servers />
   </component>
