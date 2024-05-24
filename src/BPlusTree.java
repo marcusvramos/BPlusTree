@@ -120,74 +120,176 @@ public class BPlusTree {
     public void excluir(int info) {
         No folha = navegarAteFolha(info);
         if (folha != null) {
-            int pos = folha.procurarPosicao(info);
-            if (pos > 0 && pos <= folha.getTl() && folha.getvInfo(pos - 1) == info) {
-                folha.remanejarExclusao(pos - 1);
-                folha.setTl(folha.getTl() - 1);
-                if (folha.getTl() == 0) {
-                    if (folha == raiz) {
-                        raiz = null;
-                    } else {
+            int pos = folha.procurarPosicaoExclusao(info);
+            if (pos < folha.getTl() && folha.getvInfo(pos) == info) {
+                if (folha != raiz) {
+                    int quantidade = calculaNoLig();
+                    if (folha.getTl() > quantidade) {
+                        folha.remanejarExclusao(pos);
+                        folha.setTl(folha.getTl() - 1);
                         No pai = localizarPai(folha, info);
-                        int posPai = pai.procurarPosicao(info);
-                        pai.remanejarExclusao(posPai - 1);
-                        pai.setTl(pai.getTl() - 1);
-                        if (pai.getTl() == 0) {
-                            redistribuicao(pai);
-                        }
+                        int posPai = pai.procurarPosicaoExclusao(info);
+                        if (pai.getvInfo(posPai) == info)
+                            pai.setvInfo(posPai, folha.getvInfo(0));
+                        else
+                            substituirNo(info, folha.getvInfo(0));
+                    } else {
+                        redistribuicaoFolha(folha, info);
                     }
-                } else if (folha != raiz && folha.getTl() < calculaNoLig()) {
-                    redistribuicao(folha);
+                } else {
+                    folha.remanejarExclusao(pos);
+                    folha.setTl(folha.getTl() - 1);
+                    if (folha.getTl() == 0)
+                        raiz = null;
                 }
             }
         }
     }
 
-    private void redistribuicao(No no) {
-        if (no == raiz) {
-            return;
+    private void substituirNo(int info, int infoSubstituir) {
+        No noRecebeSubtituir = raiz;
+        int pos = noRecebeSubtituir.procurarPosicaoExclusao(info);
+        while (noRecebeSubtituir.getvLig(0) != null && noRecebeSubtituir.getvInfo(pos) != info) {
+            noRecebeSubtituir = noRecebeSubtituir.getvLig(pos);
+            pos = noRecebeSubtituir.procurarPosicaoExclusao(info);
         }
+        if (noRecebeSubtituir.getvLig(0) != null) {
+            noRecebeSubtituir.setvInfo(pos, infoSubstituir);
+        }
+    }
 
-        No pai = localizarPai(no, no.getvInfo(0));
-        int posPai = pai.procurarPosicao(no.getvInfo(0));
-        No irmaEsquerda = (posPai - 1 >= 0) ? pai.getvLig(posPai - 1) : null;
-        No irmaDireita = (posPai + 1 <= pai.getTl()) ? pai.getvLig(posPai + 1) : null;
+    private void redistribuicaoFolha(No no, int info) {
+            No pai = localizarPai(no, no.getvInfo(0));
+            int posPai = pai.procurarPosicao(no.getvInfo(0));
 
-        int min = calculaNoLig();
+            int pos = no.procurarPosicaoExclusao(info);
 
-        if (irmaEsquerda != null && irmaEsquerda.getTl() > min) {
-            redistribuirComIrmaoEsquerdo(no, irmaEsquerda, pai, posPai);
-        } else if (irmaDireita != null && irmaDireita.getTl() > min) {
-            redistribuirComIrmaoDireito(no, irmaDireita, pai, posPai);
-        } else if (irmaDireita != null) {
-            concatenarComIrmaoDireito(no, irmaDireita, pai, posPai);
-        } else if (irmaEsquerda != null) {
-            concatenarComIrmaoEsquerdo(no, irmaEsquerda, pai, posPai);
+            no.remanejarExclusao(pos);
+            no.setTl(no.getTl()-1);
+
+            No irmaEsquerda = (posPai - 1 >= 0) ? pai.getvLig(posPai - 1) : null;
+            No irmaDireita = (posPai + 1 <= pai.getTl()) ? pai.getvLig(posPai + 1) : null;
+
+            int qtde = calculaNoLig();
+
+            if (irmaEsquerda != null && irmaEsquerda.getTl() > qtde) {
+                redistribuirComIrmaoEsquerdo(no, irmaEsquerda, pai, posPai);
+            } else if (irmaDireita != null && irmaDireita.getTl() > qtde) {
+                redistribuirComIrmaoDireito(no, irmaDireita, pai, posPai);
+            } else if (irmaEsquerda != null) {
+                concatenarComIrmaoEsquerdo(no, irmaEsquerda, pai, posPai);
+            } else if (irmaDireita != null) {
+                concatenarComIrmaoDireito(no, irmaDireita, pai, posPai, pos, info);
+            }
+    }
+
+    private void redistribuicaoPai(No no) {
+        if (no != raiz) {
+            int min = calculaNoLig();
+
+            if (no != null && no.getTl() < min) {
+                No pai = localizarPai(no, no.getvInfo(0));
+                int posPai = pai.procurarPosicao(no.getvInfo(0));
+
+                No irmaE = (posPai - 1 >= 0) ? pai.getvLig(posPai - 1) : null;
+                No irmaD = (posPai + 1 <= pai.getTl()) ? pai.getvLig(posPai + 1) : null;
+
+                if (irmaE != null && irmaE.getTl() > min) {
+                    redistribuirComIrmaoEsquerdo(no, irmaE, pai, posPai);
+                } else if (irmaD != null && irmaD.getTl() > min) {
+                    redistribuirComIrmaoDireito(no, irmaD, pai, posPai);
+                } else if (irmaD != null) {
+                    concatenarComIrmaoDireito(no, irmaD, pai, posPai, 0, 0);
+                } else if (irmaE != null) {
+                    concatenarComIrmaoEsquerdo(no, irmaE, pai, posPai);
+                }
+            }
         }
     }
 
     private void redistribuirComIrmaoEsquerdo(No no, No irmaEsquerda, No pai, int posPai) {
-        no.remanejar(0);
-        no.setvInfo(0, pai.getvInfo(posPai - 1));
-        no.setvLig(0, irmaEsquerda.getvLig(irmaEsquerda.getTl()));
-        no.setTl(no.getTl() + 1);
+        boolean isFolha = no.getvLig(0) == null;
 
-        pai.setvInfo(posPai - 1, irmaEsquerda.getvInfo(irmaEsquerda.getTl() - 1));
-        irmaEsquerda.setTl(irmaEsquerda.getTl() - 1);
+        if (isFolha) {
+            no.remanejar(0);
+            no.setvInfo(0, irmaEsquerda.getvInfo(irmaEsquerda.getTl()-1));
+            no.setTl(no.getTl() + 1);
+            irmaEsquerda.setTl(irmaEsquerda.getTl() - 1);
+            pai.setvInfo(posPai - 1, no.getvInfo(0));
+        } else {
+            no.setvInfo(0,pai.getvInfo(posPai-1));
+            no.setvLig(0,irmaEsquerda.getvLig(irmaEsquerda.getTl()));
+            no.setTl(no.getTl()+1);
+            pai.setvInfo(posPai-1,irmaEsquerda.getvInfo(irmaEsquerda.getTl()-1));
+            irmaEsquerda.setTl(irmaEsquerda.getTl()-1);
+        }
     }
 
     private void redistribuirComIrmaoDireito(No no, No irmaDireita, No pai, int posPai) {
-        no.setvInfo(no.getTl(), pai.getvInfo(posPai));
-        no.setTl(no.getTl() + 1);
-        no.setvLig(no.getTl(), irmaDireita.getvLig(0));
+        boolean isFolha = no.getvLig(0) == null;
 
-        pai.setvInfo(posPai, irmaDireita.getvInfo(0));
-        irmaDireita.remanejarExclusao(0);
-        irmaDireita.setTl(irmaDireita.getTl() - 1);
+        if (isFolha) {
+            no.setvInfo(no.getTl(), irmaDireita.getvInfo(0));
+            no.setTl(no.getTl() + 1);
+            irmaDireita.remanejarExclusao(0);
+            irmaDireita.setTl(irmaDireita.getTl() - 1);
+            pai.setvInfo(posPai, irmaDireita.getvInfo(0));
+        } else {
+            no.setvInfo(no.getTl(),pai.getvInfo(posPai));
+            no.setTl(no.getTl()+1);
+            no.setvLig(no.getTl(),irmaDireita.getvLig(0));
+            pai.setvInfo(posPai,irmaDireita.getvInfo(0));
+            irmaDireita.remanejarExclusao(0);
+            irmaDireita.setTl(irmaDireita.getTl()-1);
+        }
     }
 
-    private void concatenarComIrmaoDireito(No no, No irmaDireita, No pai, int posPai) {
-        for (int i = 0; i < no.getTl(); i++) {
+    private void concatenarComIrmaoDireito(No no, No irmaDireita, No pai, int posPai, int pos, int info) {
+        boolean isFolha = no.getvLig(0) == null;
+
+        if (isFolha) {
+            concatenarFolhaComIrmaoDireito(no, irmaDireita, pai, posPai, pos, info);
+        } else {
+            concatenarNaoFolhaComIrmaoDireito(no, irmaDireita, pai, posPai);
+        }
+    }
+
+    private void concatenarFolhaComIrmaoDireito(No no, No irmaDireita, No pai, int posPai, int pos, int info) {
+        no.setProx(irmaDireita.getProx());
+        if (irmaDireita.getProx() != null) {
+            irmaDireita.getProx().setAnt(no);
+        }
+
+        for (int i = 0; i < irmaDireita.getTl(); i++) {
+            no.setvInfo(no.getTl(), irmaDireita.getvInfo(i));
+            no.setTl(no.getTl() + 1);
+        }
+
+        pai.remanejarExclusao(posPai);
+        pai.setTl(pai.getTl() - 1);
+        pai.setvLig(posPai, no);
+
+        if (pai.getTl() == 0) {
+            raiz = no;
+        } else {
+            redistribuicaoPai(pai);
+        }
+
+        if (pos == 0) {
+            if (posPai == 0) {
+                substituirNo(info, no.getvInfo(pos));
+            } else {
+                pai.setvInfo(posPai - 1, no.getvInfo(0));
+            }
+        }
+    }
+
+    private void concatenarNaoFolhaComIrmaoDireito(No no, No irmaDireita, No pai, int posPai) {
+        irmaDireita.remanejar(0);
+        irmaDireita.setvInfo(0, pai.getvInfo(posPai));
+        irmaDireita.setTl(irmaDireita.getTl() + 1);
+
+        for (int i = no.getTl() - 1; i >= 0; i--) {
             irmaDireita.remanejar(0);
             irmaDireita.setvInfo(0, no.getvInfo(i));
             irmaDireita.setvLig(1, no.getvLig(i + 1));
@@ -201,11 +303,48 @@ public class BPlusTree {
         if (pai.getTl() == 0) {
             raiz = irmaDireita;
         } else {
-            redistribuicao(pai);
+            redistribuicaoPai(pai);
         }
     }
 
     private void concatenarComIrmaoEsquerdo(No no, No irmaEsquerda, No pai, int posPai) {
+        boolean isFolha = no.getvLig(0) == null;
+
+        if (isFolha) {
+            concatenarFolhaComIrmaoEsquerdo(no, irmaEsquerda, pai, posPai);
+        } else {
+            concatenarNaoFolhaComIrmaoEsquerdo(no, irmaEsquerda, pai, posPai);
+        }
+    }
+
+    private void concatenarFolhaComIrmaoEsquerdo(No no, No irmaEsquerda, No pai, int posPai) {
+        irmaEsquerda.setProx(no.getProx());
+        if (irmaEsquerda.getProx() != null) {
+            irmaEsquerda.getProx().setAnt(irmaEsquerda);
+        }
+
+        for (int i = 0; i < no.getTl(); i++) {
+            irmaEsquerda.setvInfo(irmaEsquerda.getTl(), no.getvInfo(i));
+            irmaEsquerda.setTl(irmaEsquerda.getTl() + 1);
+        }
+
+        pai.remanejarExclusao(posPai - 1);
+        pai.setTl(pai.getTl() - 1);
+        pai.setvLig(posPai - 1, irmaEsquerda);
+
+        if (pai.getTl() == 0) {
+            raiz = irmaEsquerda;
+        } else {
+            redistribuicaoPai(pai);
+        }
+    }
+
+    private void concatenarNaoFolhaComIrmaoEsquerdo(No no, No irmaEsquerda, No pai, int posPai) {
+        int pos = irmaEsquerda.procurarPosicao(pai.getvInfo(posPai - 1));
+        irmaEsquerda.remanejar(pos);
+        irmaEsquerda.setvInfo(pos, pai.getvInfo(posPai - 1));
+        irmaEsquerda.setTl(irmaEsquerda.getTl() + 1);
+
         for (int i = 0; i < no.getTl(); i++) {
             irmaEsquerda.setvInfo(irmaEsquerda.getTl(), no.getvInfo(i));
             irmaEsquerda.setvLig(irmaEsquerda.getTl(), no.getvLig(i));
@@ -214,21 +353,14 @@ public class BPlusTree {
         irmaEsquerda.setvLig(irmaEsquerda.getTl(), no.getvLig(no.getTl()));
 
         pai.remanejarExclusao(posPai - 1);
+        pai.setvLig(posPai - 1, irmaEsquerda);
         pai.setTl(pai.getTl() - 1);
 
         if (pai.getTl() == 0) {
             raiz = irmaEsquerda;
         } else {
-            redistribuicao(pai);
+            redistribuicaoPai(pai);
         }
-    }
-
-    public int calculaNoLig() {
-        return (No.N / 2) - 1;
-    }
-
-    public int calculaNoFolha() {
-        return (int) Math.ceil((double) (No.N - 1) / 2);
     }
 
     public No navegarAteFolha(int info) {
@@ -269,5 +401,17 @@ public class BPlusTree {
             }
             aux = aux.getProx();
         }
+    }
+
+    private int arredondarCeil(double valor) {
+        return (int) Math.ceil(valor);
+    }
+
+    private int calculaNoLig() {
+        return arredondarCeil((double) No.N / 2) - 1;
+    }
+
+    private int calculaNoFolha() {
+        return arredondarCeil((double) (No.N - 1) / 2);
     }
 }

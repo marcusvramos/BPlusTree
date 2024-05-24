@@ -2,21 +2,18 @@ public class Aplicacao {
     public static void main(String[] args) {
         BPlusTree b = new BPlusTree();
 
-        for (int i = 1; i <= 20; i++) {
+        for (int i = 1; i <= 5000; i++) {
             b.inserir(i);
         }
 
         System.out.println("Antes da exclusão:");
         b.exibeFolhas();
 
+        for(int i = 2000; i <= 4000; i += 1) {
+            b.excluir(i);
+        }
 
-        b.excluir(5);
-        b.excluir(10);
-        b.excluir(15);
-        b.excluir(20);
-        b.excluir(19);
-
-        System.out.println("Depois da exclusão:");
+        System.out.println("\nDepois da exclusão:");
         b.exibeFolhas();
     }
 }
