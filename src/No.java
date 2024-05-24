@@ -1,7 +1,7 @@
-class No {
+public class No {
     public static final int N = 5;
-    private int[] vInfo;
-    private No[] vLig;
+    private final int[] vInfo;
+    private final No[] vLig;
     private int tl;
     private No prox;
     private No ant;
