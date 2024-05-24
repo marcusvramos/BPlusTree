@@ -123,64 +123,83 @@ public class BPlusTree {
             int pos = folha.procurarPosicaoExclusao(info);
             if (pos < folha.getTl() && folha.getvInfo(pos) == info) {
                 if (folha != raiz) {
-                    int quantidade = calculaNoLig();
-                    if (folha.getTl() > quantidade) {
-                        folha.remanejarExclusao(pos);
-                        folha.setTl(folha.getTl() - 1);
-                        No pai = localizarPai(folha, info);
-                        int posPai = pai.procurarPosicaoExclusao(info);
-                        if (pai.getvInfo(posPai) == info)
-                            pai.setvInfo(posPai, folha.getvInfo(0));
-                        else
-                            substituirNo(info, folha.getvInfo(0));
-                    } else {
-                        redistribuicaoFolha(folha, info);
-                    }
+                    excluirDeFolhaNaoRaiz(folha, pos, info);
                 } else {
-                    folha.remanejarExclusao(pos);
-                    folha.setTl(folha.getTl() - 1);
-                    if (folha.getTl() == 0)
-                        raiz = null;
+                    excluirDeFolhaRaiz(folha, pos);
                 }
             }
         }
     }
 
-    private void substituirNo(int info, int infoSubstituir) {
-        No noRecebeSubtituir = raiz;
-        int pos = noRecebeSubtituir.procurarPosicaoExclusao(info);
-        while (noRecebeSubtituir.getvLig(0) != null && noRecebeSubtituir.getvInfo(pos) != info) {
-            noRecebeSubtituir = noRecebeSubtituir.getvLig(pos);
-            pos = noRecebeSubtituir.procurarPosicaoExclusao(info);
+    private void excluirDeFolhaNaoRaiz(No folha, int pos, int info) {
+        int quantidade = calculaNoLig();
+        if (folha.getTl() > quantidade) {
+            removerDeFolha(folha, pos);
+            atualizarPaiDepoisDeExclusao(folha, info);
+        } else {
+            redistribuicaoFolha(folha, info);
         }
-        if (noRecebeSubtituir.getvLig(0) != null) {
-            noRecebeSubtituir.setvInfo(pos, infoSubstituir);
+    }
+
+    private void excluirDeFolhaRaiz(No folha, int pos) {
+        removerDeFolha(folha, pos);
+        if (folha.getTl() == 0) {
+            raiz = null;
+        }
+    }
+
+    private void removerDeFolha(No folha, int pos) {
+        folha.remanejarExclusao(pos);
+        folha.setTl(folha.getTl() - 1);
+    }
+
+    private void atualizarPaiDepoisDeExclusao(No folha, int info) {
+        No pai = localizarPai(folha, info);
+        int posPai = pai.procurarPosicaoExclusao(info);
+        if (pai.getvInfo(posPai) == info) {
+            pai.setvInfo(posPai, folha.getvInfo(0));
+        } else {
+            substituirNo(info, folha.getvInfo(0));
+        }
+    }
+
+    private void substituirNo(int info, int novoInfo) {
+        No noAtual = raiz;
+        int pos = noAtual.procurarPosicaoExclusao(info);
+
+        while (noAtual.getvLig(0) != null && noAtual.getvInfo(pos) != info) {
+            noAtual = noAtual.getvLig(pos);
+            pos = noAtual.procurarPosicaoExclusao(info);
+        }
+
+        if (noAtual.getvLig(0) == null && noAtual.getvInfo(pos) == info) {
+            noAtual.setvInfo(pos, novoInfo);
         }
     }
 
     private void redistribuicaoFolha(No no, int info) {
-            No pai = localizarPai(no, no.getvInfo(0));
-            int posPai = pai.procurarPosicao(no.getvInfo(0));
+        No pai = localizarPai(no, no.getvInfo(0));
+        int posPai = pai.procurarPosicao(no.getvInfo(0));
 
-            int pos = no.procurarPosicaoExclusao(info);
+        int pos = no.procurarPosicaoExclusao(info);
 
-            no.remanejarExclusao(pos);
-            no.setTl(no.getTl()-1);
+        no.remanejarExclusao(pos);
+        no.setTl(no.getTl()-1);
 
-            No irmaEsquerda = (posPai - 1 >= 0) ? pai.getvLig(posPai - 1) : null;
-            No irmaDireita = (posPai + 1 <= pai.getTl()) ? pai.getvLig(posPai + 1) : null;
+        No irmaEsquerda = (posPai - 1 >= 0) ? pai.getvLig(posPai - 1) : null;
+        No irmaDireita = (posPai + 1 <= pai.getTl()) ? pai.getvLig(posPai + 1) : null;
 
-            int qtde = calculaNoLig();
+        int qtde = calculaNoLig();
 
-            if (irmaEsquerda != null && irmaEsquerda.getTl() > qtde) {
-                redistribuirComIrmaoEsquerdo(no, irmaEsquerda, pai, posPai);
-            } else if (irmaDireita != null && irmaDireita.getTl() > qtde) {
-                redistribuirComIrmaoDireito(no, irmaDireita, pai, posPai);
-            } else if (irmaEsquerda != null) {
-                concatenarComIrmaoEsquerdo(no, irmaEsquerda, pai, posPai);
-            } else if (irmaDireita != null) {
-                concatenarComIrmaoDireito(no, irmaDireita, pai, posPai, pos, info);
-            }
+        if (irmaEsquerda != null && irmaEsquerda.getTl() > qtde) {
+            redistribuirComIrmaoEsquerdo(no, irmaEsquerda, pai, posPai);
+        } else if (irmaDireita != null && irmaDireita.getTl() > qtde) {
+            redistribuirComIrmaoDireito(no, irmaDireita, pai, posPai);
+        } else if (irmaEsquerda != null) {
+            concatenarComIrmaoEsquerdo(no, irmaEsquerda, pai, posPai);
+        } else if (irmaDireita != null) {
+            concatenarComIrmaoDireito(no, irmaDireita, pai, posPai, pos, info);
+        }
     }
 
     private void redistribuicaoPai(No no) {
