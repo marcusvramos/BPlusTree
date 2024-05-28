@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="e713bf66-8a71-4856-b5eb-2706a61cf152" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Aplicacao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Aplicacao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BPlusTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BPlusTree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/No.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/No.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,22 +36,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Aplicacao.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/marcus/Documentos/PO/projB+Tree&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Aplicacao.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/marcus/Documentos/PO/projB+Tree",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Aplicacao" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Aplicacao" />
@@ -69,7 +69,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-21.0.1-openjdk-21.0.1-4caba194b151-e47b9c39" />
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.17011.79" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.17011.79" />
       </set>
     </attachedChunks>
   </component>
@@ -103,7 +104,19 @@
       <workItem from="1716160516770" duration="31000" />
       <workItem from="1716556358847" duration="2487000" />
       <workItem from="1716568453160" duration="6789000" />
-      <workItem from="1716585278457" duration="5220000" />
+      <workItem from="1716585278457" duration="5357000" />
+      <workItem from="1716592120895" duration="80000" />
+      <workItem from="1716593128347" duration="7000" />
+      <workItem from="1716817553756" duration="129000" />
+      <workItem from="1716823054157" duration="19000" />
+      <workItem from="1716824984471" duration="2056000" />
+      <workItem from="1716827212108" duration="961000" />
+      <workItem from="1716828233866" duration="181000" />
+      <workItem from="1716828938751" duration="558000" />
+      <workItem from="1716830637657" duration="20000" />
+      <workItem from="1716840401830" duration="565000" />
+      <workItem from="1716841081700" duration="147000" />
+      <workItem from="1716841292377" duration="1919000" />
     </task>
     <servers />
   </component>

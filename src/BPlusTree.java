@@ -5,6 +5,10 @@ public class BPlusTree {
         this.raiz = null;
     }
 
+    public No getRaiz() {
+        return raiz;
+    }
+
     public No navegarAteFolha(int info) {
         No aux = raiz;
         int pos;
@@ -27,7 +31,7 @@ public class BPlusTree {
         }
         while (aux != null) {
             for (int i = 0; i < aux.getTl(); i++) {
-                System.out.println(aux.getvInfo(i));
+                System.out.print(aux.getvInfo(i) + " ");
             }
             aux = aux.getProx();
         }
@@ -401,6 +405,16 @@ public class BPlusTree {
             aux = aux.getvLig(pos);
         }
         return aux == folha ? ant : null;
+    }
+
+    public void inOrdem(No no) {
+        if (no != null) {
+            for (int i = 0; i < no.getTl(); i++) {
+                inOrdem(no.getvLig(i));
+                System.out.print(no.getvInfo(i) + " ");
+            }
+            inOrdem(no.getvLig(no.getTl()));
+        }
     }
 
     private int arredondarCeil(double valor) {
