@@ -302,7 +302,7 @@ public class BPlusTree {
     }
 
     private void concatenarFolhaComIrmaoDireito(No no, No irmaDireita, No pai, int posPai, int pos, int info) {
-        ajustarFolhaProxEInfosIrmaDir(no, irmaDireita, irmaDireita.getProx());
+        ajustarFolhaProxEInfos(no, irmaDireita, irmaDireita.getProx());
 
         pai.remanejarExclusao(posPai);
         pai.setTl(pai.getTl() - 1);
@@ -319,7 +319,21 @@ public class BPlusTree {
         }
     }
 
-    private void ajustarFolhaProxEInfosIrmaDir(No no, No irmaDireita, No prox) {
+    private void concatenarFolhaComIrmaoEsquerdo(No no, No irmaEsquerda, No pai, int posPai) {
+        ajustarFolhaProxEInfos(irmaEsquerda, no, irmaEsquerda.getProx());
+
+        pai.remanejarExclusao(posPai - 1);
+        pai.setTl(pai.getTl() - 1);
+        pai.setvLig(posPai - 1, irmaEsquerda);
+
+        if (pai.getTl() == 0) {
+            raiz = irmaEsquerda;
+        } else {
+            redistribuicaoPai(pai);
+        }
+    }
+
+    private void ajustarFolhaProxEInfos(No no, No irmaDireita, No prox) {
         no.setProx(prox);
         if (prox != null) {
             prox.setAnt(no);
@@ -328,18 +342,6 @@ public class BPlusTree {
         for (int i = 0; i < irmaDireita.getTl(); i++) {
             no.setvInfo(no.getTl(), irmaDireita.getvInfo(i));
             no.setTl(no.getTl() + 1);
-        }
-    }
-
-    private void ajustarFolhaProxEInfosIrmaEsq(No no, No irmaEsq, No prox) {
-        irmaEsq.setProx(no.getProx());
-        if (prox != null) {
-            prox.setAnt(irmaEsq);
-        }
-
-        for (int i = 0; i < no.getTl(); i++) {
-            irmaEsq.setvInfo(irmaEsq.getTl() + i, no.getvInfo(i));
-            irmaEsq.setTl(irmaEsq.getTl() + 1);
         }
     }
 
@@ -361,20 +363,6 @@ public class BPlusTree {
 
         if (pai==raiz && pai.getTl() == 0) {
             raiz = irmaDireita;
-        } else {
-            redistribuicaoPai(pai);
-        }
-    }
-
-    private void concatenarFolhaComIrmaoEsquerdo(No no, No irmaEsquerda, No pai, int posPai) {
-        ajustarFolhaProxEInfosIrmaEsq(irmaEsquerda, no, irmaEsquerda.getProx());
-
-        pai.remanejarExclusao(posPai - 1);
-        pai.setTl(pai.getTl() - 1);
-        pai.setvLig(posPai - 1, irmaEsquerda);
-
-        if (pai.getTl() == 0) {
-            raiz = irmaEsquerda;
         } else {
             redistribuicaoPai(pai);
         }
