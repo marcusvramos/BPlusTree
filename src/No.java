@@ -1,5 +1,5 @@
 public class No {
-    public static final int N = 5;
+    public static final int N = 3;
     private final int[] vInfo;
     private final No[] vLig;
     private int tl;

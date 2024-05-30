@@ -276,11 +276,12 @@ public class BPlusTree {
     }
 
     private void redistribuirComIrmaoEsquerdoNaoFolha(No no, No irmaoEsquerdo, No pai, int posPai) {
-        no.setvInfo(0, pai.getvInfo(posPai - 1));
-        no.setvLig(0, irmaoEsquerdo.getvLig(irmaoEsquerdo.getTl()));
-        no.setTl(no.getTl() + 1);
-        pai.setvInfo(posPai - 1, irmaoEsquerdo.getvInfo(irmaoEsquerdo.getTl() - 1));
-        irmaoEsquerdo.setTl(irmaoEsquerdo.getTl() - 1);
+        no.remanejar(0);
+        no.setvInfo(0,pai.getvInfo(posPai-1));
+        no.setvLig(0,irmaoEsquerdo.getvLig(irmaoEsquerdo.getTl()));
+        no.setTl(no.getTl()+1);
+        pai.setvInfo(posPai-1,irmaoEsquerdo.getvInfo(irmaoEsquerdo.getTl()-1));
+        irmaoEsquerdo.setTl(irmaoEsquerdo.getTl()-1);
     }
 
     private void redistribuirComIrmaoDireitoFolha(No no, No irmaoDireito, No pai, int posPai) {
@@ -301,29 +302,25 @@ public class BPlusTree {
     }
 
     private void concatenarFolhaComIrmaoDireito(No no, No irmaDireita, No pai, int posPai, int pos, int info) {
-        ajustarFolhaProxEInfos(no, irmaDireita, irmaDireita.getProx());
+        ajustarFolhaProxEInfosIrmaDir(no, irmaDireita, irmaDireita.getProx());
 
         pai.remanejarExclusao(posPai);
         pai.setTl(pai.getTl() - 1);
         pai.setvLig(posPai, no);
 
-        if (pai.getTl() == 0) {
+        if(pai==raiz && pai.getTl()==0) {
             raiz = no;
         } else {
             redistribuicaoPai(pai);
         }
 
         if (pos == 0) {
-            if (posPai == 0) {
-                substituirNo(info, no.getvInfo(pos));
-            } else {
-                pai.setvInfo(posPai - 1, no.getvInfo(0));
-            }
+            substituirNo(info, no.getvInfo(pos));
         }
     }
 
-    private void ajustarFolhaProxEInfos(No no, No irmaDireita, No prox) {
-        no.setProx(irmaDireita.getProx());
+    private void ajustarFolhaProxEInfosIrmaDir(No no, No irmaDireita, No prox) {
+        no.setProx(prox);
         if (prox != null) {
             prox.setAnt(no);
         }
@@ -331,6 +328,18 @@ public class BPlusTree {
         for (int i = 0; i < irmaDireita.getTl(); i++) {
             no.setvInfo(no.getTl(), irmaDireita.getvInfo(i));
             no.setTl(no.getTl() + 1);
+        }
+    }
+
+    private void ajustarFolhaProxEInfosIrmaEsq(No no, No irmaEsq, No prox) {
+        irmaEsq.setProx(no.getProx());
+        if (prox != null) {
+            prox.setAnt(irmaEsq);
+        }
+
+        for (int i = 0; i < no.getTl(); i++) {
+            irmaEsq.setvInfo(irmaEsq.getTl() + i, no.getvInfo(i));
+            irmaEsq.setTl(irmaEsq.getTl() + 1);
         }
     }
 
@@ -350,7 +359,7 @@ public class BPlusTree {
         pai.remanejarExclusao(posPai);
         pai.setTl(pai.getTl() - 1);
 
-        if (pai.getTl() == 0) {
+        if (pai==raiz && pai.getTl() == 0) {
             raiz = irmaDireita;
         } else {
             redistribuicaoPai(pai);
@@ -358,7 +367,7 @@ public class BPlusTree {
     }
 
     private void concatenarFolhaComIrmaoEsquerdo(No no, No irmaEsquerda, No pai, int posPai) {
-        ajustarFolhaProxEInfos(irmaEsquerda, no, irmaEsquerda.getProx());
+        ajustarFolhaProxEInfosIrmaEsq(irmaEsquerda, no, irmaEsquerda.getProx());
 
         pai.remanejarExclusao(posPai - 1);
         pai.setTl(pai.getTl() - 1);

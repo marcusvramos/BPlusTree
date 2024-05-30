@@ -9,7 +9,7 @@ public class Aplicacao {
         System.out.println("Antes da exclusão:");
         b.exibeFolhas();
 
-        for(int i = 1; i <= 500; i += 2) {
+        for(int i = 1; i <= 400; i++) {
             b.excluir(i);
         }
 
